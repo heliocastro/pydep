@@ -139,6 +139,8 @@ def setup_dict_to_json_serializable_dict(d, **kw):
         'scripts': d['scripts'] if 'scripts' in d else None,
         'author': d['author'] if 'author' in d else None,
         'description': d['description'] if 'description' in d else None,
+        'license': d['license'] if 'license' in d else None,
+        'classifiers': d['classifiers'] if 'classifiers' in d else None,
     }
 
 
