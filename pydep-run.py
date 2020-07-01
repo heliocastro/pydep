@@ -5,9 +5,10 @@ import json
 import argparse
 import pydep.req
 import pydep.setup_py
+import pydep.setup_cfg
 import pydep.util
 
-from os import path, devnull
+from os import path, devnull, listdir
 import subprocess
 import tempfile
 import shutil
@@ -68,7 +69,19 @@ def info(args):
     if err is not None:
         sys.stderr.write('failed due to error: %s\n' % err)
         sys.exit(1)
-    print(json.dumps(setup_dict_to_json_serializable_dict(setup_dict)))
+    setup_info = setup_dict_to_json_serializable_dict(setup_dict)
+
+    # If there is a setup.cfg, use it to fill in possibly missing metadata in setup.py.
+    if 'setup.cfg' in listdir(args.dir):
+        setup_info_cfg, err = pydep.setup_cfg.setup_cfg_info_dir(args.dir)
+        if err is not None:
+            sys.stderr.write('failed due to error: %s\n' % err)
+            sys.exit(1)
+        for key, value in setup_info.items():
+            if value is None and setup_info_cfg[key] is not None:
+                setup_info[key] = setup_info_cfg[key]
+                    
+    print(json.dumps(setup_info))
 
 
 def dep(args):
