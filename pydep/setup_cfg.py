@@ -21,8 +21,8 @@ def setup_cfg_info(setupfile):
     """Returns metadata for a PyPI package by parsing its setup.cfg file."""
     config = configparser.ConfigParser()
     config.read(setupfile)
-    metadata = dict(config.items('metadata'))
-    options = dict(config.items('options'))
+    metadata = dict(config.items('metadata')) if config.has_section('metadata') else {}
+    options = dict(config.items('options')) if config.has_section('options') else {}
     return {
         'rootdir': None,
         'project_name': metadata['name'] if 'name' in metadata else None,
