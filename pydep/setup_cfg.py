@@ -1,5 +1,9 @@
-import configparser
 from os import path
+import sys
+if sys.version_info[0] >= 3:
+    import configparser
+else:
+    import ConfigParser as configparser
 
 
 def setup_cfg_info_dir(rootdir):
@@ -17,8 +21,8 @@ def setup_cfg_info(setupfile):
     """Returns metadata for a PyPI package by parsing its setup.cfg file."""
     config = configparser.ConfigParser()
     config.read(setupfile)
-    metadata = config['metadata']
-    options = config['options']
+    metadata = dict(config.items('metadata'))
+    options = dict(config.items('options'))
     return {
         'rootdir': None,
         'project_name': metadata['name'] if 'name' in metadata else None,
