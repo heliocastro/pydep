@@ -11,6 +11,6 @@ setup(
     'Usage: python -m pydep <dir>',
     zip_safe=False,
     install_requires=[
-        "pip==7.1.2",
+        "pip==23.3",
     ],
 )
